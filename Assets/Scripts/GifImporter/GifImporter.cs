@@ -11,9 +11,9 @@ public class GifImporter : MonoBehaviour {
     public static void LoadGIF() {
         //读取GIF文件
         GifFile gif = LoadGif(AssetDatabase.GetAssetPath(Selection.activeObject));
-
         //生成动画
-        GenerateAnimation("zyf", gif, "Assets");
+        string folderPath = GetFolderFromPath(AssetDatabase.GetAssetPath(Selection.activeObject));
+        GenerateAnimation(gif.name, gif, folderPath);
 
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
@@ -37,7 +37,6 @@ public class GifImporter : MonoBehaviour {
         var textures = GetTextures(gifData, FilterMode.Point, TextureWrapMode.Clamp);
 
         string fileName = GetNameFromPath(filePath);
-        Debug.Log(fileName);
 
         return new GifFile { name = fileName, textureList = textures };
     }
@@ -179,6 +178,15 @@ public class GifImporter : MonoBehaviour {
     static string GetExtensionFromPath(string path) {
         var sub = path.Split('.');
         return sub[sub.Length - 1];
+    }
+
+    //获取文件所在文件夹
+    static string GetFolderFromPath(string path) {
+        //获取文件部分长度
+        var sub = path.Split('/');
+        int fileNameLength = sub[sub.Length - 1].Length;
+
+        return path.Substring(0, path.Length - fileNameLength - 1);
     }
 
     #endregion

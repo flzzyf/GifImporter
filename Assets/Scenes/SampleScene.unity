@@ -160,8 +160,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bb828900944c36448e69dcf23fc3c2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  obj: {fileID: 2800000, guid: a90c76d015fc8184e8916d506df29a37, type: 3}
-  image: {fileID: 1002099551}
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0
@@ -679,7 +677,7 @@ GameObject:
   - component: {fileID: 1432403766}
   - component: {fileID: 1432403765}
   m_Layer: 0
-  m_Name: Gona_Walk_0
+  m_Name: Gona
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -752,7 +750,7 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!4 &1432403767
