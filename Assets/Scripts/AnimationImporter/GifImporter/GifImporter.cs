@@ -97,10 +97,17 @@ public class GifImporter : MonoBehaviour {
         Texture2D atlas = AtlasGenerator.GenerateAtlas(gif, out spriteImportData);
         atlas.filterMode = FilterMode.Point;
         atlas.name = name;
-        AssetDatabase.AddObjectToAsset(atlas, clip);
+        //AssetDatabase.AddObjectToAsset(atlas, clip);
+
+        byte[] pngBytes = atlas.EncodeToPNG();
+        string atlasPath = string.Format("{0}/{1}.png", path, name);
+        File.WriteAllBytes(atlasPath, pngBytes);
+        AssetDatabase.Refresh();
+
+        Object atlasObject = AssetDatabase.LoadAssetAtPath(atlasPath, typeof(Object));
 
         //生成贴图
-        List<Sprite> sprites = GenerateSprites(atlas, spriteImportData, atlas);
+        List<Sprite> sprites = GenerateSprites(atlas, spriteImportData, clip);
 
         //帧数
         int length = sprites.Count;
