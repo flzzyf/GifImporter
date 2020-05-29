@@ -115,10 +115,10 @@ public class GifImporter : MonoBehaviour {
         File.WriteAllBytes(atlasPath, pngBytes);
         AssetDatabase.Refresh();
 
-        Object atlasObject = AssetDatabase.LoadAssetAtPath(atlasPath, typeof(Object));
+        Texture2D atlasObject = (Texture2D)AssetDatabase.LoadAssetAtPath(atlasPath, typeof(Texture2D));
 
         //生成贴图
-        List<Sprite> sprites = GenerateSprites(atlas, spriteImportData, clip);
+        List<Sprite> sprites = GenerateSprites(atlasObject, spriteImportData, clip);
 
         //帧数
         int length = sprites.Count;
