@@ -15,7 +15,7 @@ public class GifImporter : MonoBehaviour {
                 GifFile gif = LoadGif(AssetDatabase.GetAssetPath(item));
 
                 //生成动画
-                string folderPath = GetFolderFromPath(AssetDatabase.GetAssetPath(Selection.activeObject));
+                string folderPath = GetFolderFromPath(AssetDatabase.GetAssetPath(item));
                 GenerateAnimation(gif.name, gif, folderPath);
 
                 AssetDatabase.SaveAssets();
