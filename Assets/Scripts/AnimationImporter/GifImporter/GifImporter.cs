@@ -4,13 +4,14 @@ using UnityEngine;
 using System.IO;
 using UnityEditor;
 using static UniGif;
-using UnityEditor.VersionControl;
+using UnityEditor.Experimental.AssetImporters;
 
 public class GifImporter : MonoBehaviour {
     [MenuItem("Assets/加载GIF动画")]
     public static void LoadGIF() {
         //读取GIF文件
         GifFile gif = LoadGif(AssetDatabase.GetAssetPath(Selection.activeObject));
+
         //生成动画
         string folderPath = GetFolderFromPath(AssetDatabase.GetAssetPath(Selection.activeObject));
         GenerateAnimation(gif.name, gif, folderPath);
@@ -92,8 +93,14 @@ public class GifImporter : MonoBehaviour {
         string asset = string.Format("{0}/{1}.anim", path, name);
         AssetDatabase.CreateAsset(clip, asset);
 
+		SpriteImportData[] spriteImportData = new SpriteImportData[0];
+        Texture2D atlas = AtlasGenerator.GenerateAtlas(gif, out spriteImportData);
+        atlas.filterMode = FilterMode.Point;
+        atlas.name = "Atlas";
+        AssetDatabase.AddObjectToAsset(atlas, clip);
+
         //生成贴图
-        List<Sprite> sprites = GenerateSprites(gif, clip);
+        List<Sprite> sprites = GenerateSprites(atlas, spriteImportData, atlas);
 
         //帧数
         int length = sprites.Count;
@@ -142,16 +149,13 @@ public class GifImporter : MonoBehaviour {
     }
 
     //生成Sprite
-    static List<Sprite> GenerateSprites(GifFile gifFile, Object parentObject) {
+    static List<Sprite> GenerateSprites(Texture2D texture, SpriteImportData[] spriteImportData, Object parentObject) {
         List<Sprite> sprites = new List<Sprite>();
 
-        for (int i = 0; i < gifFile.textureList.Count; i++) {
-            GifTexture gifTexture = gifFile.textureList[i];
-            Texture2D texture = gifTexture.m_texture2d;
-
-            Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(.5f, 0), 100, 1, SpriteMeshType.Tight);
+        for (int i = 0; i < spriteImportData.Length; i++) {
+            Sprite sprite = Sprite.Create(texture, spriteImportData[i].rect, new Vector2(.5f, 0), 100, 1, SpriteMeshType.Tight);
             //Sprite名称
-            string name = string.Format("{0}_{1}", gifFile.name, i);
+            string name = string.Format("{0}_{1}", texture.name, i);
             sprite.name = name;
 
             AssetDatabase.AddObjectToAsset(sprite, parentObject);
