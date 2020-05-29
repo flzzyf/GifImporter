@@ -128,6 +128,8 @@ public static partial class UniGif
             bgColor = Color.black;
         }
 
+        bgColor.a = 0;
+
         return colorTable;
     }
 
@@ -186,7 +188,7 @@ public static partial class UniGif
         filledTexture = false;
 
         // Create texture
-        Texture2D tex = new Texture2D(gifData.m_logicalScreenWidth, gifData.m_logicalScreenHeight, TextureFormat.ARGB32, false);
+        Texture2D tex = new Texture2D(gifData.m_logicalScreenWidth, gifData.m_logicalScreenHeight, TextureFormat.RGBA32, false);
         tex.filterMode = filterMode;
         tex.wrapMode = wrapMode;
 
