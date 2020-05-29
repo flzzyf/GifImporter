@@ -9,20 +9,31 @@ using UnityEditor.Experimental.AssetImporters;
 public class GifImporter : MonoBehaviour {
     [MenuItem("Assets/加载GIF动画")]
     public static void LoadGIF() {
-        //读取GIF文件
-        GifFile gif = LoadGif(AssetDatabase.GetAssetPath(Selection.activeObject));
+        //读取选中的GIF文件
+        foreach (var item in Selection.objects) {
+            if (GetExtensionFromPath(AssetDatabase.GetAssetPath(item)) == "gif") {
+                GifFile gif = LoadGif(AssetDatabase.GetAssetPath(item));
 
-        //生成动画
-        string folderPath = GetFolderFromPath(AssetDatabase.GetAssetPath(Selection.activeObject));
-        GenerateAnimation(gif.name, gif, folderPath);
+                //生成动画
+                string folderPath = GetFolderFromPath(AssetDatabase.GetAssetPath(Selection.activeObject));
+                GenerateAnimation(gif.name, gif, folderPath);
 
-        AssetDatabase.SaveAssets();
-        AssetDatabase.Refresh();
+                AssetDatabase.SaveAssets();
+                AssetDatabase.Refresh();
+            }
+        }
     }
 
     [MenuItem("Assets/加载GIF动画", true)]
     public static bool LoadGIFValidation() {
-        return GetExtensionFromPath(AssetDatabase.GetAssetPath(Selection.activeObject)) == "gif";
+        //是否至少有一个选择的物体是GIF
+        foreach (var item in Selection.objects) {
+            if (GetExtensionFromPath(AssetDatabase.GetAssetPath(item)) == "gif") {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     //读取GIF文件
