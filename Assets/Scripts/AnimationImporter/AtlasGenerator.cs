@@ -49,7 +49,6 @@ public class AtlasGenerator {
 		}
 
 		return GenerateAtlas(textures, out spriteData, spriteSize, cols, rows);
-		//return GenerateAtlas()
 	}
 
 	static Texture2D GenerateAtlas(Texture2D[] textures, out SpriteImportData[] spriteData, Vector2Int spriteSize, int cols, int rows) {

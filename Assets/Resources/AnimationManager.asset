@@ -12,3 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fdd448932f71db945a75141623f9bc0c, type: 3}
   m_Name: AnimationManager
   m_EditorClassIdentifier: 
+  animationInfos: []

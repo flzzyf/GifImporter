@@ -14,12 +14,22 @@ public class GifImporter : MonoBehaviour {
             if (GetExtensionFromPath(AssetDatabase.GetAssetPath(item)) == "gif") {
                 GifFile gif = LoadGif(AssetDatabase.GetAssetPath(item));
 
+                //动画信息
+                AnimationInfo info = new AnimationInfo();
+                info.name = gif.name;
+                info.type = AnimationFileType.GIF;
+                info.source = item;
+
                 //生成动画
                 string folderPath = GetFolderFromPath(AssetDatabase.GetAssetPath(item));
-                GenerateAnimation(gif.name, gif, folderPath);
+                GenerateAnimation(gif.name, gif, folderPath, ref info);
 
                 AssetDatabase.SaveAssets();
                 AssetDatabase.Refresh();
+
+                if (AnimationManager.instance != null) {
+                    AnimationManager.instance.AddAnimation(info);
+                }
             }
         }
     }
@@ -95,7 +105,7 @@ public class GifImporter : MonoBehaviour {
     }
 
     //生成动画
-    static void GenerateAnimation(string name, GifFile gif, string path) {
+    static void GenerateAnimation(string name, GifFile gif, string path, ref AnimationInfo info) {
         AnimationClip clip = new AnimationClip();
         clip.name = name;
         clip.frameRate = 25;
@@ -115,7 +125,9 @@ public class GifImporter : MonoBehaviour {
         File.WriteAllBytes(atlasPath, pngBytes);
         AssetDatabase.Refresh();
 
+        //生成的贴图
         Texture2D atlasObject = (Texture2D)AssetDatabase.LoadAssetAtPath(atlasPath, typeof(Texture2D));
+        atlasObject.filterMode = FilterMode.Point;
 
         //生成贴图
         List<Sprite> sprites = GenerateSprites(atlasObject, spriteImportData, clip);
@@ -163,7 +175,8 @@ public class GifImporter : MonoBehaviour {
 
         AnimationUtility.SetAnimationClipSettings(clip, settings);
 
-        AssetDatabase.ImportAsset(AssetDatabase.GetAssetPath(clip));
+        info.animationClip = clip;
+        info.texture = atlasObject;
     }
 
     //生成Sprite
